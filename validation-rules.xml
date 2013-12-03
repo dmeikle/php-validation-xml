@@ -1,0 +1,17 @@
+<pages>
+ <page name="test2.php">
+  <rules>
+  	<rule name="firstname">Required, String</rule>
+  	<rule name="lastname">Required, String</rule>
+  	<rule name="age">Numeric</rule>
+  	<rule name="address">Address</rule>
+  </rules>
+ </page>
+  <page name="test1.php">
+  <rules>
+  	<rule name="firstname">Required, String</rule>
+  	<rule name="lastname">Required, String</rule>
+  	<rule name="age">Numeric</rule>
+  </rules>
+ </page>
+</pages>
