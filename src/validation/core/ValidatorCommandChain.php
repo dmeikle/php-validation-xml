@@ -1,4 +1,4 @@
-<?
+<?php
 
 //this class extends CommandChain rather then simply accessing CommandChain directly since we're not passing in a value
 //to save/edit/delete, etc... we're passing in a value to validate and determine whether it's valid (true/false)
@@ -45,5 +45,3 @@ class ValidatorCommandChain extends CommandChain{
 	
 }
 
-
-?>

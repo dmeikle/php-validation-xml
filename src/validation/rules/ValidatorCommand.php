@@ -1,8 +1,8 @@
-<?
+<?php
 
-namespace rules;
+namespace validation\rules;
 
-use ValidatorCommand;
+use validation\core\Command;
 
 abstract class ValidatorCommand extends Command
 {
@@ -30,5 +30,3 @@ abstract class ValidatorCommand extends Command
         $itemToCheck->setValid();
     }
 }
-
-?>

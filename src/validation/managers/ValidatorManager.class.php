@@ -1,4 +1,4 @@
-<?
+<?php
 
 class ValidatorManager{
 	
@@ -38,6 +38,3 @@ class ValidatorManager{
 	
 }
 
-
-
-?>

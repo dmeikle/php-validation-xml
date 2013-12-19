@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 class ValidationXMLManager{
@@ -86,4 +86,3 @@ class ValidationXMLManager{
 	}
 }
 
-?>

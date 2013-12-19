@@ -1,4 +1,6 @@
-<?
+<?php
+namespace validation\core;
+
 
 abstract class Command {
     
@@ -7,5 +9,3 @@ abstract class Command {
     
 }
 
-
-?>

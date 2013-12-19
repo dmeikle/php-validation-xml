@@ -1,8 +1,9 @@
-<?
-namespace rules;
+<?php
 
-use ValidatorCommand;
+namespace validation\rules;
 
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
 
 
 class AlphabetValidatorCommand extends ValidatorCommand{
@@ -29,6 +30,3 @@ class AlphabetValidatorCommand extends ValidatorCommand{
 }
 
 
-
-
-?>

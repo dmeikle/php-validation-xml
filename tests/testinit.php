@@ -15,7 +15,7 @@ $loader->registerNamespaces(
       ));
 $loader->register();
 
-print_r($loader);
+
 function getRootDirectory() {
 	$site_path = realpath(dirname(__FILE__));
 
