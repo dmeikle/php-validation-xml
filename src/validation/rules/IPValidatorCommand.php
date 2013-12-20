@@ -1,24 +1,41 @@
-<?
+<?php
 
-namespace rules;
+namespace validation\rules;
 
-use ValidatorCommand;
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
 
 
-class IPValidatorCommand extends ValidatorCommand{
+
+/**
+ * IPValidatorCommand - receives an IP address and validates only if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
+ class IPValidatorCommand extends ValidatorCommand{
     
-    /** Creates a new instance of URLValidator */
+    /** Creates a new instance of IPValidatorCommand */
     public function __construct() {
-        parent::__construct("^((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?)$^");
+        parent::__construct("/^((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?)$/");
     }
 
-    public function onCommand($action, &$object) {
-        if("validateip"!=strtolower($action))
-            return false;
-        //object should be of type ValidationItem...
-        if(!($object instanceof ValidationItem))
-            return false;
-      
+
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+    public function onCommand($action, ValidationItem &$object) {
+    	
+        if("validateip"!=strtolower($action)) {
+        	return false;
+        }            
+       
 	    //the object contains a pass/fail flag within it...
         $this->checkValidChars($object);
         
@@ -27,8 +44,3 @@ class IPValidatorCommand extends ValidatorCommand{
     }
     
 }
-
-
-
-
-?>

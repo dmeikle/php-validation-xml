@@ -5,14 +5,33 @@ namespace validation\rules;
 use validation\core\Command;
 use validation\core\ValidationItem;
 
+
+/**
+ * ValidatorCommand - Base class for the validation commands
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 abstract class ValidatorCommand extends Command
 {
+	
+	/** 
+	 * this is the regex expression
+	 */
     protected $regex;
     
+	/** default constructor */
     public function __construct($regex){
-        $this->regex=$regex;//this is the regex expression
+        $this->regex=$regex;
     }
  
+ 	/**
+     * method checkValidChars - does the actual checking
+     * 
+     * @param ValidationItem 	object
+	 *
+     */
     protected function checkValidChars(ValidationItem &$itemToCheck){
     	if(strlen($itemToCheck->getStringValue()) == 0) {
     		//we don't check for 'required' so if there's nothing to check it passed
@@ -27,15 +46,27 @@ abstract class ValidatorCommand extends Command
 			
     }
     
-    //because sometimes you just don't want to figure out why your regex isn't working...
+    /**
+     * method checkValidCharsAgainstString - does the actual checking
+     * 
+     * @param ValidationItem 	object
+	 * @param string			valid character list
+	 *
+     */
     protected function checkValidCharsAgainstString(ValidationItem &$itemToCheck, $expression){
         $string=$itemToCheck->getStringValue();
         //loop through the character array checking each character exists in the expression to validate against
-        for($i=0; $i< count($chars); $i++){
-            $char=$string[i];
-            if(strpos($expression,$char)<0)
-                return; //default set to fail inside of ValidationItem            
+        for($i = 0; $i < count($chars); $i++) {
+        	
+            $char = $string[i];
+			
+            if(strpos($expression,$char) < 0) {
+            	
+            	return; //default set to fail inside of ValidationItem     
+            }
+                       
         }
+		
         $itemToCheck->setValid();
     }
 }

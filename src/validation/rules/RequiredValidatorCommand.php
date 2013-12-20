@@ -1,35 +1,47 @@
-<?
+<?php
 
-namespace rules;
+namespace validation\rules;
 
-use ValidatorCommand;
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
 
 
+
+/**
+ * RequiredValidatorCommand - receives a value and validates only if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class RequiredValidatorCommand extends ValidatorCommand{
     
-    /** Creates a new instance of URLValidator */
+    /** Creates a new instance of RequiredValidatorCommand */
     public function __construct() {
         
     }
 
-    public function onCommand($action, &$object) {
-        if("validaterequired"!=strtolower($action))
-            return false;
-        //object should be of type ValidationItem...
-        if(!($object instanceof ValidationItem))
-            return false;
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+    public function onCommand($action, ValidationItem &$object) {
+    	
+        if("validaterequired"!=strtolower($action)) {
+        	return false;
+        }
 		
 	    //the object contains a pass/fail flag within it...
-       if(strlen($object->getStringValue())>0){
+       if(strlen($object->getStringValue()) > 0) {
 	   		$object->setValid();
 	   }
+	   
         //this just means that this was the class we wanted to call
         return true;
     }
     
 }
-
-
-
-
-?>

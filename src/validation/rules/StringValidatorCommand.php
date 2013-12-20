@@ -1,23 +1,40 @@
-<?
+<?php
 
-namespace rules;
+namespace validation\rules;
 
-use ValidatorCommand;
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
 
+
+
+/**
+ * StringValidatorCommand - receives a string value and validates only if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class StringValidatorCommand extends ValidatorCommand{
     
     /** Creates a new instance of StringValidatorCommand */
     public function __construct() {
-        parent::__construct("^[a-zA-Z\\s]+$^");
+        parent::__construct("/^[a-zA-Z\\s-\']+$/");
     }
 
-    public function onCommand($action, &$object) {
-        if("validatestring"!=strtolower($action))
-            return false;
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+    public function onCommand($action, ValidationItem &$object) {
+    	
+        if("validatestring" != strtolower($action)) {
+        	return false;
+        }
 		
-        //object should be of type ValidationItem...
-        if(!($object instanceof ValidationItem))
-            return false;
         //the object contains a pass/fail flag within it...
         $this->checkValidChars($object);
         
@@ -26,8 +43,3 @@ class StringValidatorCommand extends ValidatorCommand{
     }
     
 }
-
-
-
-
-?>
