@@ -11,6 +11,7 @@ class ValidationXMLManager{
 		if(isset($xmlAsString))			
 		$this->xml = new SimpleXMLElement($xmlAsString);	
 	} 
+	
 	public function loadXML($path){
 		$this->xml=  simplexml_load_file($path);
 		$this->path=$path;
@@ -39,6 +40,7 @@ class ValidationXMLManager{
 		
 		return $ruleSet;
 	}
+	
 	public function getAllPages(){
 		$list=array();
 		
@@ -47,6 +49,7 @@ class ValidationXMLManager{
 		}
 		return $list;
 	}
+	
 	public function removePage($pageName,$save=true){
 		//had to do this HUGE work around since we dont have the dom library installed to handle removing child nodes...
 		$newXML=new SimpleXMLElement("<pages></pages>");
@@ -71,6 +74,7 @@ class ValidationXMLManager{
 		}	
 		 
 	}
+	
 	public function addPage($pageName,$rules){
 		//not a very elegant approach but since we don't have dom lib installed, have to
 		//build this manually...
