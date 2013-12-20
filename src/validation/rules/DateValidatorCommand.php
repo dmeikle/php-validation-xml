@@ -1,42 +1,74 @@
-<?
+<?php
+
+namespace validation\rules;
+
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
 
 
-namespace rules;
 
-use ValidatorCommand;
-
+/**
+ * DateValidatorCommand - receives a date and validates only if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class DateValidatorCommand extends ValidatorCommand{
     
     /** Creates a new instance of URLValidator */
     public function __construct() {
-        parent::__construct("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$^");
+        
     }
 
-    public function onCommand($action, &$object) {
-        if("validatedate"!=strtolower($action))
-            return false;
-        //object should be of type ValidationItem...
-        if(!($object instanceof ValidationItem))
-            return false;
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+    public function onCommand($action, ValidationItem &$object) {
+        if("validatedate"!=strtolower($action)) {
+        	return false;
+        }          
       
+	  	//pass it if there's nothing to check
+	  	if(strlen($object->getStringValue()) == 0) {
+	  		$object->setValid();
+			
+	  		return true;
+	  	}
 	    //the object contains a pass/fail flag within it...
-	    if($this->isDate($object->getValue()))
+	    if($this->isDate($object->getStringValue()))
 			$object->setValid();
         
         //this just means that this was the class we wanted to call
         return true;
     }
-    private static function isDate($string)
-	  {
+	
+	/**
+	 * method isDate - checks format to ensure is proper date format
+	 * 
+	 * @param string - the date to check
+	 * 
+	 * @return boolean
+	 */
+    private function isDate($string) {
 	    $t = strtotime($string);
+		
+		//for invalid strings it defaults to 01/01/1970 on an empty $t value
+		//so kick it out before we check if there's no value in $t
+		if($t=='') {
+			return false;
+		}
+		
 	    $m = date('m',$t);
 	    $d = date('d',$t);
 	    $y = date('Y',$t);
+		
 	    return checkdate ($m, $d, $y);
-	  }
+	}
 }
 
-
-
-
-?>

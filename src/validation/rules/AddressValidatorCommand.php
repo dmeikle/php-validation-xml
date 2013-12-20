@@ -5,23 +5,38 @@ namespace validation\rules;
 use validation\rules\ValidatorCommand;
 use validation\core\ValidationItem;
 
+
+/**
+ * AddressValidatorCommand - receives an address and validates if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class AddressValidatorCommand extends ValidatorCommand {
 
-	/** Creates a new instance of AddressValidator */
+	/**
+     * default constructor
+     */
 	public function __construct() {
-		//parent::__construct("^[0-9]+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)$^");
+		
 		parent::__construct("^[A-Za-z0-9\\s\\-\\.]$^");
 		
 	}
 
-	public function onCommand($action, &$object) {
-		if ('validateaddress' != strtolower($action))
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+	public function onCommand($action, ValidationItem &$object) {
+		if ('validateaddress' != strtolower($action)) {
 			return false;
+		}	
 		
-		//object should be of type ValidationItem...
-		if (!($object instanceof ValidationItem))
-			return false;
-
 		//the object contains a pass/fail flag within it...
 		$this -> checkValidChars($object);
 

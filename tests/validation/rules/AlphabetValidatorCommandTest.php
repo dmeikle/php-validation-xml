@@ -32,6 +32,12 @@ class AlphabetValidatorCommandTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse(is_null($object));
 		$this->assertFalse($object->getIsValid());
 		
+		//now let's pass in an empty string - we don't care if it NEEDS to be there,
+		//we only care that IF there is something, it is valid
+		$object = new ValidationItem(''); 	
+		$command->onCommand('validatealphanumeric', $object); 		
+		$this->assertTrue($object->getIsValid());
+		
 		//now let's pass in a valid address
 		$object = new ValidationItem($validString); 	
 		$command->onCommand('validateAlphabet', $object); 

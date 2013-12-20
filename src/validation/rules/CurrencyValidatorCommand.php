@@ -1,23 +1,39 @@
-<?
+<?php
 
+namespace validation\rules;
 
-namespace rules;
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
+use exceptions\InvalidInstanceException;
 
-use ValidatorCommand;
-
+/**
+ * CurrencyValidatorCommand - receives a value and validates only if it holds a value
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class CurrencyValidatorCommand extends ValidatorCommand{
     
-    /** Creates a new instance of URLValidator */
+    /**
+     * default constructor
+     */
     public function __construct() {
-        parent::__construct("^([0-9])+(\\.([0-9]{2}))?$^");
+        parent::__construct("/^-?[0-9]+(?:\.[0-9]{1,2})?$/");
     }
 
-    public function onCommand($action, &$object) {
-        if("validatecurrency"!=strtolower($action))
-            return false;
-        //object should be of type ValidationItem...
-        if(!($object instanceof ValidationItem))
-            return false;
+	/**
+     * method onCommand - used by the command chain
+     * 
+     * @param string 			action
+     * @param ValidationItem 	object
+	 * 
+	 * @return boolean
+     */
+    public function onCommand($action, ValidationItem &$object) {
+        if("validatecurrency"!=strtolower($action)) {
+        	return false;
+        }         
       
 	    //the object contains a pass/fail flag within it...
         $this->checkValidChars($object);
@@ -29,6 +45,3 @@ class CurrencyValidatorCommand extends ValidatorCommand{
 }
 
 
-
-
-?>
