@@ -1,4 +1,9 @@
 <?php
+namespace validation\managers;
+
+use validation\core\ValidatorCommandChain;
+use validation\managers\ValidationXMLManager;
+use validation\exceptions\XMLNodeNotConfiguredException;
 
 class ValidatorManager{
 	
@@ -15,16 +20,23 @@ class ValidatorManager{
 	}
 	
 	public function validateForm($form,$uri){
-		
+		if(!is_array($form)) {
+			throw new \InvalidArgumentException('form should be instance of array',5070);
+		}
 		$cmd = new ValidatorCommandChain();
 		
 		$vxm = new ValidationXMLManager();
 		$vxm->loadXML($this->filepath);
 		
 		$rules = $vxm->getRulesByPage($uri);
+		
+		if(is_null($rules)) {
+			throw new XMLNodeNotConfiguredException('no matching uri for ' . $uri);
+		}
+		
 		$results = array();
 		
-			$keys = array_keys($rules);
+		$keys = array_keys($rules);
 		
 		for($i = 0; $i < count($keys); $i++){
 			$key = $keys[$i];
@@ -34,12 +46,16 @@ class ValidatorManager{
 			
 			//1 item may have more than 1 validation - eg: Required, String
 			$thisRule = $rules[$key];
-			$tests = explode(",",$thisRule);
+			$tests = explode(",", $thisRule);
 		
 			for($j = 0;$j < count($tests); $j++){
-				$passed = $cmd->runCommand("validate".trim($tests[$j]), $form[$key]);//this will send the item out, then we check it's 'isValid()' property to see if it passed.
+				
+				//this will send the item out, then we check it's 'isValid()' property to see if it passed.
+				$passed = $cmd->runCommand("validate".trim($tests[$j]), $form[$key]);
+				
 				if(!$passed){
-					$results[$key] = trim($tests[$j]);//add this form's field name and test performed to the list	
+					//add this form's field name and test performed to the list	
+					$results[$key] = trim($tests[$j]);
 					break;//stop after the item fails its first test
 				}
 			}

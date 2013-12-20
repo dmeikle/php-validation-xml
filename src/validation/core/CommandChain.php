@@ -20,7 +20,7 @@ class CommandChain
 	 * 
 	 * @param Command	- the object to add
 	 */
-	protected function addCommand(Command $cmd) {
+	public function addCommand(Command $cmd) {
 		
 		$this->_commands[] = $cmd;
 		

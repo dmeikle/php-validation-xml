@@ -1,5 +1,6 @@
 <?php
 
+namespace validation\managers;
 
 class ValidationXMLManager{
 
@@ -7,9 +8,9 @@ class ValidationXMLManager{
 	
 	private $path="";
 	
-	public function __construct($xmlAsString){
+	public function __construct($xmlAsString = null){
 		if(isset($xmlAsString))			
-		$this->xml = new SimpleXMLElement($xmlAsString);	
+		$this->xml = new \SimpleXMLElement($xmlAsString);	
 	} 
 	
 	public function loadXML($path){
@@ -52,7 +53,7 @@ class ValidationXMLManager{
 	
 	public function removePage($pageName,$save=true){
 		//had to do this HUGE work around since we dont have the dom library installed to handle removing child nodes...
-		$newXML=new SimpleXMLElement("<pages></pages>");
+		$newXML=new \SimpleXMLElement("<pages></pages>");
 		
 		$pages = $this->xml->xpath("/pages/page ");
 		foreach($pages as $page){			

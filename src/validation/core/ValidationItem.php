@@ -21,8 +21,8 @@ class ValidationItem {
 	/** by default we fail everything */
    private $isValid=false;
    
-   public function __construct($validateThis){
-       $this->validateThis=$validateThis;
+   public function __construct($validateThis){   	
+       $this->validateThis=$validateThis;	  
    }
    
    /**

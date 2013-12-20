@@ -14,6 +14,7 @@ use validation\rules\StringValidatorCommand;
 use validation\rules\TelephoneValidatorCommand;
 use validation\rules\URLValidatorCommand;
 use validation\rules\RequiredValidatorCommand;
+use validation\rules\ValidatorCommand;
 use validation\core\ValidationItem;
 
 
@@ -28,7 +29,10 @@ use validation\core\ValidationItem;
  * 
  * @copyright 2007 - 2014
  */
-class ValidatorCommandChain extends CommandChain{
+class ValidatorCommandChain
+{
+	
+	private $_commands = array();
 	
 	
 	/**
@@ -36,6 +40,17 @@ class ValidatorCommandChain extends CommandChain{
 	 */
 	function __construct() {
 		$this->init();
+	}
+	
+	/**
+	 * addCommand 		- adds the command object to the list of choices
+	 * 
+	 * @param Command	- the object to add
+	 */
+	public function addCommand(ValidatorCommand $cmd) {
+		
+		$this->_commands[] = $cmd;
+		
 	}
 	
 	/**
@@ -71,13 +86,20 @@ class ValidatorCommandChain extends CommandChain{
 	public function runCommand($name, &$args) {
 		$name= preg_replace('/[^A-Za-z]/', '',$name);//mitigate SQL injection
   
+  		if(is_null($name) || strlen($name) == 0) {
+  			throw new \InvalidArgumentException('empty runCommand received',5050);
+  		}
+		
   		$item = new ValidationItem($args);
 		
-    	foreach($this->_commands as $cmd) { 
+    	foreach($this->_commands as $cmd) {
 			if ($cmd->onCommand($name, $item)) {
     	  		return $item->getIsValid();
-    	  	}        
+    	  	}      
+			
     	}
+		
+		throw new \InvalidArgumentException('invalid runCommand received or command not loaded',5055);
   	}
 	
 }
