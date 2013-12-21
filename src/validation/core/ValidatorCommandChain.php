@@ -1,18 +1,61 @@
 <?php
+namespace validation\core;
 
-//this class extends CommandChain rather then simply accessing CommandChain directly since we're not passing in a value
-//to save/edit/delete, etc... we're passing in a value to validate and determine whether it's valid (true/false)
-// and since the Command.onCommand returns true (meaning, yes, I am the command u want) already, we need to pass in a separate
-//object (ValidationItem) as a container we can look into for the final result 
-class ValidatorCommandChain extends CommandChain{
+use validation\rules\AddressValidatorCommand;
+use validation\rules\AlphaNumericValidatorCommand;
+use validation\rules\AlphabetValidatorCommand;
+use validation\rules\BusinessNameValidatorCommand;
+use validation\rules\CurrencyValidatorCommand;
+use validation\rules\DateValidatorCommand;
+use validation\rules\EmailValidatorCommand;
+use validation\rules\IPValidatorCommand;
+use validation\rules\NumericValidatorCommand;
+use validation\rules\StringValidatorCommand;
+use validation\rules\TelephoneValidatorCommand;
+use validation\rules\URLValidatorCommand;
+use validation\rules\RequiredValidatorCommand;
+use validation\rules\ValidatorCommand;
+use validation\core\ValidationItem;
+
+
+/**
+ * ValidatorCommandChain - this class is not a typical CommandChain class.
+ * This is because we're passing in a value to validate and determine whether it's valid (true/false)
+ * and since the traditional Command->onCommand returns true (meaning, yes, I am the command u want) already, 
+ * we need to pass in a separate object (ValidationItem) as a container we can look into for the final result 
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
+class ValidatorCommandChain
+{
 	
-	 //private $_commands = array();
-
-	function __construct(){
+	private $_commands = array();
+	
+	
+	/**
+	 *  default constructor
+	 */
+	function __construct() {
 		$this->init();
 	}
 	
-	private function init(){
+	/**
+	 * addCommand 		- adds the command object to the list of choices
+	 * 
+	 * @param Command	- the object to add
+	 */
+	public function addCommand(ValidatorCommand $cmd) {
+		
+		$this->_commands[] = $cmd;
+		
+	}
+	
+	/**
+	 * init	- instantiate and load all the selected validation commands
+	 */
+	private function init() {
         $this->addCommand(new AddressValidatorCommand());
         $this->addCommand(new AlphaNumericValidatorCommand());
         $this->addCommand(new AlphabetValidatorCommand());
@@ -31,17 +74,32 @@ class ValidatorCommandChain extends CommandChain{
 	
   
 
-  public function runCommand( $name, &$args )
-  {
-  	$name=Sanitizer::string($name);//mitigate SQL injection
-  	$item = new ValidationItem($args);
+	/**
+	 * runCommand	- the entry point for the validation from the page to be validated
+	 * 
+	 * @param string	name of command
+	 * @param string 	input to validate
+	 * 
+	 * @return boolean
+	 */
+	public function runCommand($name, &$args) {
+		$name= preg_replace('/[^A-Za-z]/', '',$name);//mitigate SQL injection
+  
+  		if(is_null($name) || strlen($name) == 0) {
+  			throw new \InvalidArgumentException('empty runCommand received',5050);
+  		}
 		
-    foreach( $this->_commands as $cmd )
-    { 
-      if ( $cmd->onCommand( $name, $item ) )
-        return $item->getIsValid();
-    }
-  }
+  		$item = new ValidationItem($args);
+		
+    	foreach($this->_commands as $cmd) {
+			if ($cmd->onCommand($name, $item)) {
+    	  		return $item->getIsValid();
+    	  	}      
+			
+    	}
+		
+		throw new \InvalidArgumentException('invalid runCommand received or command not loaded',5055);
+  	}
 	
 }
 

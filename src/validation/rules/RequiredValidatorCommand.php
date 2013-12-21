@@ -34,7 +34,18 @@ class RequiredValidatorCommand extends ValidatorCommand{
         if("validaterequired"!=strtolower($action)) {
         	return false;
         }
-		
+	
+		//if it's an array we need to check its count
+		if(is_array($object->getStringValue())) {
+			
+			//the object contains a pass/fail flag within it...
+	       	if(count($object->getStringValue()) > 0) {
+		   		$object->setValid();
+			 
+			   	return true;
+				
+		   	}
+		}
 	    //the object contains a pass/fail flag within it...
        if(strlen($object->getStringValue()) > 0) {
 	   		$object->setValid();

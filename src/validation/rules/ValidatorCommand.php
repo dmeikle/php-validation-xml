@@ -33,16 +33,30 @@ abstract class ValidatorCommand extends Command
 	 *
      */
     protected function checkValidChars(ValidationItem &$itemToCheck){
-    	if(strlen($itemToCheck->getStringValue()) == 0) {
+    	
+    	if(!is_array($itemToCheck->getStringValue()) && strlen($itemToCheck->getStringValue()) == 0 ||
+			is_array($itemToCheck->getStringValue()) && count($itemToCheck->getStringValue()) == 0) {
     		//we don't check for 'required' so if there's nothing to check it passed
     		$itemToCheck->setValid();
 			
 			return;
     	}
 		
-		if(preg_match($this->regex,$itemToCheck->getStringValue())) {
-        	$itemToCheck->setValid();
-        }
+		if(is_array($itemToCheck->getStringValue())) {
+						
+			$rows = $itemToCheck->getStringValue();
+			
+			foreach($rows as $row) {
+				if(!preg_match($this->regex,$row)) {
+					//fail right away
+		        	return;
+		        }
+			}
+		} else {
+			if(preg_match($this->regex,$itemToCheck->getStringValue())) {
+	        	$itemToCheck->setValid();
+	        }
+		}
 			
     }
     

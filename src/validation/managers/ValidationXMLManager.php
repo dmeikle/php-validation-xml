@@ -1,24 +1,58 @@
 <?php
 
+namespace validation\managers;
 
+
+/**
+ * ValidationXMLManager - loads and manipulates nodes in the configuration xml file
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class ValidationXMLManager{
 
 	private $xml="";
 	
 	private $path="";
 	
-	public function __construct($xmlAsString){
-		if(isset($xmlAsString))			
-		$this->xml = new SimpleXMLElement($xmlAsString);	
+	
+	/**
+	 * default constructor
+	 * 
+	 * @param string	a loaded xml document as a string (optional).
+	 * 					if not passed in, then loadXML(path) must be used.
+	 */
+	public function __construct($xmlAsString = null){
+		if(isset($xmlAsString))	{
+			$this->xml = new \SimpleXMLElement($xmlAsString);	
+		}		
+		
 	} 
+	
+	/**
+	 * loadXML	loads an xml document into memory
+	 * 
+	 * @param string	path to xml file
+	 */
 	public function loadXML($path){
-		$this->xml=  simplexml_load_file($path);
-		$this->path=$path;
+		$this->xml = simplexml_load_file($path);
+		$this->path = $path;
 	}
 	
-	//pages->page>>uri attribute
-	//echo "page name: ". $pages->page[0]->attributes()->name."\r\n"; //this is the page name
+	
+	/**
+	 * getRulesByPage	loads the rules from an xml document
+	 * 
+	 * @param string	name of page (uri)
+	 * 
+	 * @return array
+	 */
 	public function getRulesByPage($pageName){
+		/* descriptor
+		//pages->page>>uri attribute
+		//echo "page name: ". $pages->page[0]->attributes()->name."\r\n"; //this is the page name
+		*/
 		foreach($this->xml->children() as $node){
 			if($node->attributes()->name==$pageName){
 			//	//return the page rules as a string array with 2 columns - field, rules
@@ -28,17 +62,26 @@ class ValidationXMLManager{
 		return null;
 	}
 
+	/**
+	 * getRules	loads traverses the node and finds the appropriate rules
+	 * 
+	 * @param node	
+	 * 
+	 * @return array
+	 */
 	//page->fields->fieldName
 	private function getRules($node){
+		
 		$ruleSet=array();
-		foreach($node->rules->children() as $rule){
+		
+		foreach($node->rules->children() as $rule) {
 			$name=trim($rule->attributes()->name);			
-			$ruleSet[ "$name" ] = trim((string)$rule);//$rule["firstname"]="Required, String";
-			//array_push($ruleSet,$name , trim((string)$rule));
+			$ruleSet[ "$name" ] = trim((string)$rule);//$rule["firstname"]="Required, String";			
 		}
 		
 		return $ruleSet;
 	}
+	
 	public function getAllPages(){
 		$list=array();
 		
@@ -47,9 +90,10 @@ class ValidationXMLManager{
 		}
 		return $list;
 	}
+	
 	public function removePage($pageName,$save=true){
 		//had to do this HUGE work around since we dont have the dom library installed to handle removing child nodes...
-		$newXML=new SimpleXMLElement("<pages></pages>");
+		$newXML=new \SimpleXMLElement("<pages></pages>");
 		
 		$pages = $this->xml->xpath("/pages/page ");
 		foreach($pages as $page){			
@@ -71,6 +115,7 @@ class ValidationXMLManager{
 		}	
 		 
 	}
+	
 	public function addPage($pageName,$rules){
 		//not a very elegant approach but since we don't have dom lib installed, have to
 		//build this manually...
