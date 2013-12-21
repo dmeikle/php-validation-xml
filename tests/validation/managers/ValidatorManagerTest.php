@@ -9,13 +9,16 @@ use validation\managers\ValidatorManager;
 class ValidatorManagerTest extends \PHPUnit_Framework_TestCase
 {
 	
-	 
-	 
-    public function testValidateForm() {
-        $filepath = getRootDirectory() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
+	private function getValidatorManager() {
+		 $filepath = getRootDirectory() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
 			'validation' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'validation-rules.xml';
 			
-		$mgr = new ValidatorManager($filepath);
+		return new ValidatorManager($filepath);
+	}
+	 
+    public function testValidateForm() {
+    	
+        $mgr = $this->getValidatorManager();
 		
 		//first pass in invalid params
 		$uri = 'test2.php';
@@ -56,10 +59,35 @@ class ValidatorManagerTest extends \PHPUnit_Framework_TestCase
 			
 		}catch(\Exception $e) {
 			$this->fail($e->getMessage());
-		}
-		
-		
+		}	
 	
     }
+
+	public function testGetPageElements() {
+		
+        $mgr = $this->getValidatorManager();
+		
+		$uri = 'test2.php';
+		$form = array('firstname'=>'test12','lastname'=>'smith', 'likes'=>array('long walks', 'happy people1', 'puppies'));
+		try{
+			$result = $mgr->validateForm($form,$uri);
+		}catch(\Exception $e) {
+			
+		}
+		
+		//now lets see which form elements we had in the xml file
+		$elements = $mgr->getPageElements();
+		
+		//this is based on the current XML config - you edit the file you must change this array to match
+		$expectedArray = array(
+			    'firstname',
+			    'lastname',
+			    'age',
+			    'address',
+			    'likes'
+			    );
+
+		$this->assertEquals($elements, $expectedArray);
+	}
 	
 }

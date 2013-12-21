@@ -17,6 +17,10 @@ class ValidatorManager{
 	
 	private $filepath;
 	
+	
+	private $pageElements;
+	
+	
 	/** default constructor
 	 * 
 	 * @param string	optional path to xml file
@@ -31,6 +35,16 @@ class ValidatorManager{
 		
 	}
 	
+	/**
+	 * getPageElements 
+	 * 
+	 * @return array 	- list of all page elements used in validation.
+	 * 					  useful if you want to prune posted items that
+	 * 					  are not in the list, for security concerns
+	 */
+	public function getPageElements() {
+		return $this->pageElements;
+	}
 	
 	/**
 	 * validationForm - the entry point for this class
@@ -58,6 +72,9 @@ class ValidatorManager{
 		$results = array();
 		
 		$keys = array_keys($rules);
+		
+		//pass this to form level so we can access these later if we need to
+		$this->pageElements = $keys;
 		
 		for($i = 0; $i < count($keys); $i++){
 			$key = $keys[$i];
