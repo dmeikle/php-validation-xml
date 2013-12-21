@@ -2,6 +2,14 @@
 
 namespace validation\managers;
 
+
+/**
+ * ValidationXMLManager - loads and manipulates nodes in the configuration xml file
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class ValidationXMLManager{
 
 	private $xml="";

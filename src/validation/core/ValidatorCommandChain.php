@@ -19,10 +19,9 @@ use validation\core\ValidationItem;
 
 
 /**
- * ValidatorCommandChain - this class extends CommandChain rather then simply accessing CommandChain directly 
- * since we're not passing in a value to a save/edit/delete, etc...Command class.
- * We're passing in a value to validate and determine whether it's valid (true/false)
- * and since the Command->onCommand returns true (meaning, yes, I am the command u want) already, 
+ * ValidatorCommandChain - this class is not a typical CommandChain class.
+ * This is because we're passing in a value to validate and determine whether it's valid (true/false)
+ * and since the traditional Command->onCommand returns true (meaning, yes, I am the command u want) already, 
  * we need to pass in a separate object (ValidationItem) as a container we can look into for the final result 
  * 
  * @author	Dave Meikle

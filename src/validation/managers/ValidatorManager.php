@@ -5,10 +5,22 @@ use validation\core\ValidatorCommandChain;
 use validation\managers\ValidationXMLManager;
 use validation\exceptions\XMLNodeNotConfiguredException;
 
+
+/**
+ * ValidationManager - validates the submitted form
+ * 
+ * @author	Dave Meikle
+ * 
+ * @copyright 2007 - 2014
+ */
 class ValidatorManager{
 	
 	private $filepath;
 	
+	/** default constructor
+	 * 
+	 * @param string	optional path to xml file
+	 */
 	public function __construct($xmlFilePath='') {
 		if(strlen($xmlFilePath) == 0) {
 			//look for it in our default project path
@@ -19,6 +31,15 @@ class ValidatorManager{
 		
 	}
 	
+	
+	/**
+	 * validationForm - the entry point for this class
+	 * 
+	 * @param array 	the values to validate
+	 * @param string	the page uri to check
+	 * 
+	 * @return array
+	 */
 	public function validateForm($form,$uri){
 		if(!is_array($form)) {
 			throw new \InvalidArgumentException('form should be instance of array',5070);
