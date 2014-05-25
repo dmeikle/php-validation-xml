@@ -1,0 +1,19 @@
+{
+    "name": "quantumunit/php-validation",
+    "type": "library",
+    "description": "validation for php",
+    "keywords": ["php","validation"],
+    "homepage": "https://github.com/dmeikle/php-validation",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dave Meikle",
+            "email": "david@quantumunit.com",
+            "homepage": "http://www,quantumunit.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0"
+    }
+}
