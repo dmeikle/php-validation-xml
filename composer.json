@@ -1,7 +1,7 @@
 {
     "name": "quantumunit/php-validation",
     "type": "library",
-    "description": "validation for php",
+    "description": "php validation library",
     "keywords": ["php","validation"],
     "homepage": "https://github.com/dmeikle/php-validation",
     "license": "MIT",
@@ -9,11 +9,18 @@
         {
             "name": "Dave Meikle",
             "email": "david@quantumunit.com",
-            "homepage": "http://www,quantumunit.com",
-            "role": "Developer"
+	    "homepage": "http://www.quantumunit.com",
+	    "role": "Developer"
         }
     ],
+    "minimum-stability": "stable",
     "require": {
-        "php": ">=5.0.0"
+	"monolog/monolog": "1.2.*"
+    },
+    "require-dev": {
+	"phpunit/phpunit": "4.0.*"
+    },
+    "autoload": {
+	"psr-0": {"": "./"}
     }
 }
