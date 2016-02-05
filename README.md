@@ -1,7 +1,7 @@
 php-validation
 ==============
 
-my first crack at learning PHP back in 2007<br><br>
+my first crack at switching from Java and to learn PHP back in 2007<br><br>
 
 Coming from many years in a Java background I decided to learn PHP at some point. So, pick something you know
  and run with it in a different language. This is my first attempt at PHP Validation for a server that we could 
